@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tap to Earn Game</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            margin-top: 10px;
+        }
+        .score-container {
+            font-size: 32px;
+            font-weight: bold;
+            color: #f1c40f;
+            margin: 15px 0;
+        }
+        #coin {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #f39c12, #d35400);
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0px 8px 20px rgba(243, 156, 18, 0.4);
+            transition: transform 0.05s ease;
+        }
+        #coin:active {
+            transform: scale(0.90);
+        }
+        .stat-box {
+            background: #1e1e1e;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px auto;
+            width: 80%;
+            font-size: 14px;
+        }
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin: 8px;
+            cursor: pointer;
+            width: 85%;
+        }
+        .btn-ad {
+            background-color: #e67e22;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>⚡ Tap Hustle</h1>
+    </div>
+
+    <div class="score-container">
+        🪙 <span id="coinCount">0</span>
+    </div>
+
+    <div class="stat-box">
+        ⚡ Energy: <span id="energy">500</span> / 500
+    </div>
+
+    <div id="coin" onclick="handleTap()">TAP</div>
+
+    <button class="btn" id="upgradeBtn" onclick="buyUpgrade()">
+        📈 Buy Mining Card (Cost: 50 Coins)
+    </button>
+
+    <button class="btn btn-ad" onclick="watchAd()">
+        📺 Watch Ad to Refill Energy
+    </button>
+
+    <script>
+        let coins = 0;
+        let energy = 500;
+        let maxEnergy = 500;
+        let profitPerHour = 0;
+        let upgradeCost = 50;
+
+        function handleTap() {
+            if (energy > 0) {
+                coins += 1;
+                energy -= 1;
+                updateDisplay();
+            } else {
+                alert("Out of Energy! Wait for refill or watch an ad.");
+            }
+        }
+
+        function buyUpgrade() {
+            if (coins >= upgradeCost) {
+                coins -= upgradeCost;
+                profitPerHour += 10;
+                upgradeCost = Math.floor(upgradeCost * 1.5);
+                
+                document.getElementById("upgradeBtn").innerText = 
+                    `📈 Buy Mining Card (Cost: ${upgradeCost} Coins)`;
+                updateDisplay();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        function watchAd() {
+            alert("Simulating Video Ad... Thanks for watching!");
+            energy = maxEnergy;
+            updateDisplay();
+        }
+
+        setInterval(() => {
+            if (energy < maxEnergy) {
+                energy += 1;
+                updateDisplay();
+            }
+        }, 1000);
+
+        setInterval(() => {
+            if (profitPerHour > 0) {
+                coins += Math.floor(profitPerHour / 360);
+                updateDisplay();
+            }
+        }, 10000);
+
+        function updateDisplay() {
+            document.getElementById("coinCount").innerText = coins;
+            document.getElementById("energy").innerText = energy;
+        }
+    </script>
+
+</body>
+</html>

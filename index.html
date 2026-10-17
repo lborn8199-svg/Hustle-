@@ -3,390 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Tap Hustle - Deluxe Edition</title>
+    <title>Hamster Hustle - Tap to Earn</title>
     <style>
         * {
             box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            background: linear-gradient(180deg, #0f0f15 0%, #1a1a26 100%);
+            background-color: #000000;
             color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 15px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-        }
-        .header {
-            margin-top: 5px;
-        }
-        .title {
-            font-size: 22px;
-            font-weight: 800;
-            color: #ffcc00;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
-            margin-bottom: 5px;
-        }
-        .rank-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 13px;
-            font-weight: bold;
-            color: #00e5ff;
-        }
-        .progress-container {
-            width: 80%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 10px auto;
+            padding: 12px;
             overflow: hidden;
         }
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ffcc00, #ff8800);
-            border-radius: 10px;
-            transition: width 0.3s ease;
+        /* Top Header Info */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 12px;
         }
-        .score-container {
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #1c1f24;
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid #2d3139;
+        }
+        .avatar-small {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #ff9d00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .level-title {
+            font-size: 11px;
+            color: #8b8e99;
+            font-weight: 600;
+        }
+        .level-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f3ba2f;
+        }
+
+        /* 3 Stat Boxes */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .stat-card {
+            background: #15181c;
+            border: 1px solid #23272e;
+            border-radius: 12px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 10px;
+            color: #8b8e99;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .stat-value {
+            font-size: 13px;
+            font-weight: 800;
+            color: #55f32f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            margin-top: 3px;
+        }
+
+        /* Main Score Display */
+        .score-section {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .main-score {
             font-size: 38px;
             font-weight: 900;
-            color: #ffffff;
-            margin: 10px 0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
         }
-        .passive-income {
-            font-size: 12px;
-            color: #a0a0b0;
-            margin-top: -5px;
-        }
-        .coin-area {
-            position: relative;
-            margin: 20px auto;
-            width: 200px;
-            height: 200px;
-        }
-        #coin {
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 35% 35%, #ffe600, #ff9900 60%, #b36b00);
+        .coin-icon-large {
+            width: 36px;
+            height: 36px;
+            background: radial-gradient(circle at 30% 30%, #ffd700, #ff8c00);
             border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+            font-size: 20px;
+        }
+
+        /* Hamster Tap Button */
+        .tap-area {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .circle-outer {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(243, 186, 47, 0.15) 0%, rgba(0,0,0,0) 70%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+            border: 2px solid rgba(243, 186, 47, 0.3);
+        }
+        .circle-inner {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1e2229, #13151b);
+            border: 4px solid #f3ba2f;
+            box-shadow: 0 0 25px rgba(243, 186, 47, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.05s ease-out;
+            position: relative;
+        }
+        .circle-inner:active {
+            transform: scale(0.93);
+        }
+        .hamster-avatar {
+            font-size: 110px;
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5));
+            pointer-events: none;
+        }
+
+        /* Floating +1 Text */
+        .floating-num {
+            position: absolute;
+            font-size: 32px;
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            box-shadow: 0 0 30px rgba(255, 170, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            transition: transform 0.05s ease;
-            border: 4px solid #ffea75;
-        }
-        #coin:active {
-            transform: scale(0.92);
-        }
-        .floating-text {
-            position: absolute;
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0 0 8px #ffcc00;
+            text-shadow: 0 0 10px #f3ba2f;
             pointer-events: none;
             animation: floatUp 0.8s ease-out forwards;
         }
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-80px) scale(1.3); }
+            100% { opacity: 0; transform: translateY(-70px) scale(1.2); }
         }
-        .energy-container {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 8px 15px;
-            font-size: 14px;
-            font-weight: 600;
+
+        /* Energy & Booster Bar */
+        .bottom-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 10px;
             margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .btn {
-            background: linear-gradient(135deg, #2b2b3d 0%, #1c1c28 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+        .energy-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            font-weight: 800;
             color: #ffffff;
-            padding: 12px 8px;
+        }
+        .boost-btn {
+            background: linear-gradient(90deg, #ff9000, #ff5500);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 14px;
+            color: #ffffff;
+            font-weight: 800;
             font-size: 13px;
-            font-weight: bold;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 10px rgba(255, 85, 0, 0.4);
+        }
+
+        /* Bottom Tab Navigation Bar */
+        .nav-bar {
+            background: #15181c;
+            border-radius: 16px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 6px;
+            border: 1px solid #23272e;
+        }
+        .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s;
+            gap: 3px;
+            padding: 6px 0;
+            color: #8b8e99;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 10px;
         }
-        .btn:active {
-            transform: translateY(2px);
-            background: linear-gradient(135deg, #383850 0%, #252535 100%);
+        .nav-item.active {
+            background: #1c2026;
+            color: #ffffff;
+            border: 1px solid #2d323b;
         }
-        .btn-highlight {
-            background: linear-gradient(135deg, #00c853 0%, #008e3a 100%);
-            border: none;
-        }
-        .btn-orange {
-            background: linear-gradient(135deg, #ff9100 0%, #c77000 100%);
-            border: none;
-        }
-        .sub-text {
-            font-size: 11px;
-            opacity: 0.8;
-            font-weight: normal;
+        .nav-icon {
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="title">⚡ TAP HUSTLE</div>
-        <div class="rank-badge" id="rankBadge">🥉 Bronze Hustler</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-    </div>
-
+    <!-- Header / Level Info -->
     <div>
-        <div class="score-container">
-            <span>🪙</span> <span id="score">0</span>
+        <div class="top-bar">
+            <div class="profile-card">
+                <div class="avatar-small">🐹</div>
+                <div>
+                    <div class="level-title">CEO Rank</div>
+                    <div class="level-name" id="rankName">Grandmaster 3/10</div>
+                </div>
+            </div>
+            <div class="profile-card">
+                <span style="font-size:12px; color:#8b8e99;">Exchange:</span>
+                <span style="font-size:12px; font-weight:800; color:#ffffff;">Binance 🟡</span>
+            </div>
         </div>
-        <div class="passive-income">
-            Passive Income: +<span id="profitRate">0</span>/sec
+
+        <!-- 3 Stat Display Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Earn per tap</div>
+                <div class="stat-value" style="color:#ffd700;">🤝 +<span id="tapPower">1</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Coins to level up</div>
+                <div class="stat-value" style="color:#00e5ff;">🎯 <span id="nextLevel">5K</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Profit per hour</div>
+                <div class="stat-value" style="color:#55f32f;">💰 +<span id="pPH">1.2K</span></div>
+            </div>
         </div>
     </div>
 
-    <div class="coin-area">
-        <div id="coin">TAP</div>
+    <!-- Main Balance Display -->
+    <div class="score-section">
+        <div class="main-score">
+            <div class="coin-icon-large">🪙</div>
+            <span id="scoreDisplay">0</span>
+        </div>
     </div>
 
+    <!-- Tap Character Button -->
+    <div class="tap-area">
+        <div class="circle-outer">
+            <div class="circle-inner" id="tapButton">
+                <div class="hamster-avatar">🐹</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Energy and Boost Button -->
     <div>
-        <div class="energy-container">
-            <span>⚡ Energy</span>
-            <span><span id="energy">500</span> / <span id="maxEnergy">500</span></span>
+        <div class="bottom-info">
+            <div class="energy-box">
+                ⚡ <span id="energy">500</span> / <span id="maxEnergy">500</span>
+            </div>
+            <button class="boost-btn" id="boostBtn">
+                🚀 Boost Energy
+            </button>
         </div>
 
-        <div class="btn-grid">
-            <button class="btn btn-highlight" id="buyCardBtn">
-                ⛏️ Mining Card
-                <span class="sub-text">Cost: <span id="cardCost">50</span> | +1/sec</span>
-            </button>
-
-            <button class="btn btn-orange" id="refillBtn">
-                📺 Watch Ad
-                <span class="sub-text">Instant Full Energy</span>
-            </button>
-
-            <button class="btn" id="dailyRewardBtn">
-                🎁 Daily Reward
-                <span class="sub-text">+500 Free Coins</span>
-            </button>
-
-            <button class="btn" id="taskBtn">
-                📋 Join Channel
-                <span class="sub-text">+1,000 Coins</span>
-            </button>
+        <!-- Bottom Navigation Bar -->
+        <div class="nav-bar">
+            <div class="nav-item active">
+                <div class="nav-icon">🐹</div>
+                <span>Exchange</span>
+            </div>
+            <div class="nav-item" id="mineTab">
+                <div class="nav-icon">⛏️</div>
+                <span>Mine</span>
+            </div>
+            <div class="nav-item" id="friendsTab">
+                <div class="nav-icon">👥</div>
+                <span>Friends</span>
+            </div>
+            <div class="nav-item" id="earnTab">
+                <div class="nav-icon">🪙</div>
+                <span>Earn</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💎</div>
+                <span>Airdrop</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // Game State
-        let score = parseInt(localStorage.getItem('hustle_score')) || 0;
-        let energy = parseInt(localStorage.getItem('hustle_energy')) || 500;
+        // State Management
+        let score = parseInt(localStorage.getItem('hamster_score')) || 0;
+        let energy = parseInt(localStorage.getItem('hamster_energy')) || 500;
         let maxEnergy = 500;
-        let cardCost = parseInt(localStorage.getItem('hustle_cardCost')) || 50;
-        let passiveIncome = parseInt(localStorage.getItem('hustle_passiveIncome')) || 0;
         let tapPower = 1;
+        let passiveIncome = parseInt(localStorage.getItem('hamster_pPH')) || 0;
 
         // UI Elements
-        const scoreEl = document.getElementById('score');
-        const energyEl = document.getElementById('energy');
-        const coin = document.getElementById('coin');
-        const coinArea = document.querySelector('.coin-area');
-        const cardCostEl = document.getElementById('cardCost');
-        const profitRateEl = document.getElementById('profitRate');
-        const rankBadge = document.getElementById('rankBadge');
-        const progressBar = document.getElementById('progressBar');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const energyDisplay = document.getElementById('energy');
+        const tapButton = document.getElementById('tapButton');
+        const tapArea = document.querySelector('.tap-area');
+        const pPHEl = document.getElementById('pPH');
 
-        // Audio Effects (Web Audio API Synthesizer)
+        // Audio Effects
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playCoinSound() {
+        function playTapSound() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.08);
+            osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Save State
-        function saveGame() {
-            localStorage.setItem('hustle_score', score);
-            localStorage.setItem('hustle_energy', energy);
-            localStorage.setItem('hustle_cardCost', cardCost);
-            localStorage.setItem('hustle_passiveIncome', passiveIncome);
-        }
-
-        // Update UI
         function updateUI() {
-            scoreEl.innerText = score.toLocaleString();
-            energyEl.innerText = energy;
-            cardCostEl.innerText = cardCost;
-            profitRateEl.innerText = passiveIncome;
-
-            // Ranks System
-            let rank = "🥉 Bronze Hustler";
-            let progress = (score / 1000) * 100;
-
-            if (score >= 10000) {
-                rank = "💎 Diamond Boss";
-                progress = 100;
-            } else if (score >= 2500) {
-                rank = "🥇 Gold Hustler";
-                progress = ((score - 2500) / 7500) * 100;
-            } else if (score >= 1000) {
-                rank = "🥈 Silver Hustler";
-                progress = ((score - 1000) / 1500) * 100;
-            }
-
-            rankBadge.innerText = rank;
-            progressBar.style.width = Math.min(progress, 100) + '%';
+            scoreDisplay.innerText = score.toLocaleString();
+            energyDisplay.innerText = energy;
+            pPHEl.innerText = passiveIncome > 1000 ? (passiveIncome/1000).toFixed(1) + 'K' : passiveIncome;
         }
 
-        // Tap Handler
-        coin.addEventListener('click', (e) => {
+        // Tap Handler with Floating Text
+        tapButton.addEventListener('click', (e) => {
             if (energy >= tapPower) {
                 score += tapPower;
                 energy -= tapPower;
 
-                // Play Audio & Haptics
-                playCoinSound();
-                if (navigator.vibrate) navigator.vibrate(20);
+                playTapSound();
+                if (navigator.vibrate) navigator.vibrate(15);
 
-                // Spawn Floating Text (+1)
-                const rect = coinArea.getBoundingClientRect();
-                const floatingText = document.createElement('div');
-                floatingText.className = 'floating-text';
-                floatingText.innerText = '+' + tapPower;
-                floatingText.style.left = (e.clientX - rect.left - 15) + 'px';
-                floatingText.style.top = (e.clientY - rect.top - 20) + 'px';
-                coinArea.appendChild(floatingText);
+                // Spawn floating +1
+                const rect = tapArea.getBoundingClientRect();
+                const floatEl = document.createElement('div');
+                floatEl.className = 'floating-num';
+                floatEl.innerText = '+' + tapPower;
+                floatEl.style.left = (e.clientX - rect.left - 10) + 'px';
+                floatEl.style.top = (e.clientY - rect.top - 20) + 'px';
+                tapArea.appendChild(floatEl);
 
-                setTimeout(() => floatingText.remove(), 800);
+                setTimeout(() => floatEl.remove(), 800);
 
                 updateUI();
-                saveGame();
+                localStorage.setItem('hamster_score', score);
+                localStorage.setItem('hamster_energy', energy);
             }
         });
 
-        // Mining Card Purchase
-        document.getElementById('buyCardBtn').addEventListener('click', () => {
-            if (score >= cardCost) {
-                score -= cardCost;
-                passiveIncome += 1;
-                cardCost = Math.floor(cardCost * 1.5);
+        // Boost Energy
+        document.getElementById('boostBtn').addEventListener('click', () => {
+            energy = maxEnergy;
+            updateUI();
+            alert("Energy Fully Refilled! 🚀");
+        });
+
+        // Mine Card Purchase (Passive Income)
+        document.getElementById('mineTab').addEventListener('click', () => {
+            let cost = 100;
+            if (score >= cost) {
+                score -= cost;
+                passiveIncome += 250;
+                localStorage.setItem('hamster_pPH', passiveIncome);
                 updateUI();
-                saveGame();
+                alert("Purchased Mining Card! Profit Per Hour increased +250/hr!");
             } else {
-                alert("Not enough coins!");
+                alert("Need at least 100 coins to buy a Mining Upgrade!");
             }
         });
 
-        // Simulated Ad Refill
-        document.getElementById('refillBtn').addEventListener('click', () => {
-            alert("Watching Ad... (Simulated)");
-            setTimeout(() => {
-                energy = maxEnergy;
-                updateUI();
-                saveGame();
-                alert("Energy Fully Refilled!");
-            }, 1000);
+        // Task Tab
+        document.getElementById('earnTab').addEventListener('click', () => {
+            score += 1000;
+            updateUI();
+            alert("Daily Check-in Claimed! +1,000 Coins 🪙");
         });
 
-        // Daily Reward
-        document.getElementById('dailyRewardBtn').addEventListener('click', () => {
-            const lastClaim = localStorage.getItem('hustle_lastClaim');
-            const today = new Date().toDateString();
-
-            if (lastClaim === today) {
-                alert("You already claimed today's reward! Come back tomorrow.");
-            } else {
-                score += 500;
-                localStorage.setItem('hustle_lastClaim', today);
-                updateUI();
-                saveGame();
-                alert("Claimed +500 Free Coins!");
-            }
-        });
-
-        // Task Button
-        document.getElementById('taskBtn').addEventListener('click', () => {
-            if (localStorage.getItem('hustle_taskCompleted')) {
-                alert("Task already completed!");
-            } else {
-                window.open("https://t.me/Telegram", "_blank");
-                score += 1000;
-                localStorage.setItem('hustle_taskCompleted', 'true');
-                updateUI();
-                saveGame();
-                alert("Task Completed! +1,000 Coins awarded!");
-            }
-        });
-
-        // Passive Income Loop (Per Second)
+        // Passive Income Loop (Every second)
         setInterval(() => {
             if (passiveIncome > 0) {
-                score += passiveIncome;
+                score += Math.ceil(passiveIncome / 3600);
                 updateUI();
-                saveGame();
             }
         }, 1000);
 
-        // Energy Regeneration Loop (1 Energy every 2 seconds)
+        // Energy Regen
         setInterval(() => {
             if (energy < maxEnergy) {
                 energy = Math.min(maxEnergy, energy + 1);
                 updateUI();
-                saveGame();
             }
-        }, 2000);
+        }, 1500);
 
-        // Initial Load
         updateUI();
     </script>
 </body>
 </html>
+
 

@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>CoinBlitz - Tactical HQ</title>
+    <title>CoinBlitz - Hamster GameDev</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         :root {
-            --primary: #d97706;
-            --primary-glow: #f59e0b;
-            --bg-dark: #0b1120;
-            --panel-bg: rgba(30, 41, 59, 0.85);
-            --border-glow: rgba(245, 158, 11, 0.4);
+            --primary: #2563eb;
+            --primary-glow: #38bdf8;
+            --bg-dark: #070d19;
+            --panel-bg: rgba(15, 23, 42, 0.85);
+            --border-glow: rgba(56, 189, 248, 0.3);
         }
 
         * {
@@ -35,35 +36,33 @@
             position: relative;
         }
 
-        /* DYNAMIC LEVEL BACKGROUNDS */
         .stage-environment {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 60%, #020617 100%);
+            background: radial-gradient(circle at 50% 30%, #1d4ed8 0%, #0f172a 60%, #020617 100%);
             z-index: 1;
             pointer-events: none;
-            transition: background 0.5s ease;
         }
 
         .spotlight {
             position: absolute;
             top: -20%;
-            width: 120px;
+            width: 130px;
             height: 120%;
-            background: linear-gradient(180deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0) 100%);
+            background: linear-gradient(180deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 100%);
             transform-origin: top center;
             filter: blur(15px);
             pointer-events: none;
         }
-        .spotlight.left { left: 15%; transform: rotate(-25deg); }
-        .spotlight.right { right: 15%; transform: rotate(25deg); }
+        .spotlight.left { left: 10%; transform: rotate(-25deg); }
+        .spotlight.right { right: 10%; transform: rotate(25deg); }
 
         .squad-silhouette {
             position: absolute;
-            bottom: 18%;
+            bottom: 20%;
             width: 100%;
             height: 140px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 200'%3E%3Cpath fill='%230a1120' opacity='0.85' d='M50,200 L50,140 Q60,120 75,120 Q90,120 100,140 L100,200 M200,200 L200,110 Q215,90 235,90 Q255,90 270,110 L270,200 M730,200 L730,110 Q745,90 765,90 Q785,90 800,110 L800,200 M900,200 L900,140 Q910,120 925,120 Q940,120 950,140 L950,200'/%3E%3C/svg%3E") repeat-x center bottom;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 200'%3E%3Cpath fill='%23070d19' opacity='0.9' d='M50,200 L50,140 Q60,120 75,120 Q90,120 100,140 L100,200 M200,200 L200,110 Q215,90 235,90 Q255,90 270,110 L270,200 M730,200 L730,110 Q745,90 765,90 Q785,90 800,110 L800,200 M900,200 L900,140 Q910,120 925,120 Q940,120 950,140 L950,200'/%3E%3C/svg%3E") repeat-x center bottom;
             z-index: 2;
             pointer-events: none;
         }
@@ -83,7 +82,6 @@
             pointer-events: auto;
         }
 
-        /* TOP HUD */
         .top-status-bar {
             display: flex;
             justify-content: space-between;
@@ -103,14 +101,14 @@
 
         .rank-avatar {
             width: 32px; height: 32px;
-            background: #d97706;
+            background: #2563eb;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 12px;
-            box-shadow: 0 0 10px rgba(217, 119, 6, 0.5);
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
         }
 
         .currencies {
@@ -129,8 +127,7 @@
             border-radius: 10px;
         }
 
-        /* LEVEL PROGRESS HUD */
-        .level-card {
+        .discovery-card {
             background: var(--panel-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-glow);
@@ -140,14 +137,14 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        .level-header {
+        .disc-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 6px;
             font-size: 11px;
             font-weight: 800;
-            color: #fbbf24;
+            color: #38bdf8;
         }
 
         .bar-outer {
@@ -159,29 +156,27 @@
 
         .bar-inner {
             height: 100%;
-            background: linear-gradient(90deg, #d97706, #fbbf24);
+            background: linear-gradient(90deg, #2563eb, #38bdf8);
             width: 0%;
             transition: width 0.3s ease;
         }
 
-        /* BALANCE */
         .balance-container {
             text-align: center;
             margin: 6px 0;
         }
 
         .balance-val {
-            font-size: 38px;
+            font-size: 40px;
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        /* STAGE */
         .character-stage {
             position: relative;
             flex: 1;
@@ -195,16 +190,16 @@
         .podium-base {
             width: 220px;
             height: 50px;
-            background: radial-gradient(ellipse at center, #d97706 0%, #78350f 50%, transparent 75%);
+            background: radial-gradient(ellipse at center, #2563eb 0%, #1d4ed8 50%, transparent 75%);
             border-radius: 50%;
             position: absolute;
             bottom: 5px;
-            box-shadow: 0 0 40px rgba(217, 119, 6, 0.6);
+            box-shadow: 0 0 40px rgba(37, 99, 235, 0.7);
             transform: rotateX(60deg);
             pointer-events: none;
         }
 
-        .tactical-rabbit-avatar {
+        .hamster-avatar {
             width: 180px;
             height: 240px;
             z-index: 15;
@@ -214,11 +209,10 @@
             pointer-events: auto;
         }
 
-        .tactical-rabbit-avatar:active {
+        .hamster-avatar:active {
             transform: scale(0.92);
         }
 
-        /* SIDE BUTTONS */
         .stage-side-btn {
             position: absolute;
             right: 5px;
@@ -241,13 +235,12 @@
         .stage-side-btn.middle { top: 32%; }
         .stage-side-btn.bottom { bottom: 12%; }
 
-        /* FLOATING HIT NUMBERS */
         .floating-hit {
             position: absolute;
             font-size: 28px;
             font-weight: 900;
-            color: #fbbf24;
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
             pointer-events: none;
             z-index: 99;
             animation: floatUp 0.7s ease-out forwards;
@@ -258,7 +251,6 @@
             100% { opacity: 0; transform: translateY(-70px) scale(1.2); }
         }
 
-        /* BOTTOM HUD */
         .bottom-hud {
             display: flex;
             flex-direction: column;
@@ -273,7 +265,7 @@
             padding: 0 4px;
             font-size: 11px;
             font-weight: 800;
-            color: #fbbf24;
+            color: #38bdf8;
         }
 
         .main-nav {
@@ -301,20 +293,19 @@
         }
 
         .nav-item.active {
-            background: rgba(217, 119, 6, 0.2);
-            color: #fbbf24;
-            border: 1px solid rgba(251, 191, 36, 0.3);
+            background: rgba(37, 99, 235, 0.2);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
         }
 
         .nav-icon {
             font-size: 16px;
         }
 
-        /* MODALS (Shop, Referral, Bots) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 999;
             display: none;
             justify-content: center;
@@ -323,16 +314,16 @@
         }
         .modal-box {
             background: #0f172a;
-            border: 2px solid #fbbf24;
+            border: 2px solid #38bdf8;
             border-radius: 16px;
             width: 100%;
             max-width: 340px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
         }
         .modal-btn {
-            background: #d97706;
+            background: #2563eb;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -346,37 +337,33 @@
 </head>
 <body>
 
-    <!-- STAGE ENVIRONMENT -->
-    <div class="stage-environment" id="bgEnvironment">
+    <div class="stage-environment">
         <div class="spotlight left"></div>
         <div class="spotlight right"></div>
         <div class="squad-silhouette"></div>
     </div>
 
-    <!-- UI OVERLAY -->
     <div class="ui-layer">
         
-        <!-- TOP HUD -->
         <div class="interactive-element">
             <div class="top-status-bar">
                 <div class="user-rank">
                     <div class="rank-avatar" id="levelNum">1</div>
                     <div>
                         <div style="font-size: 9px; color: #94a3b8;">RANK</div>
-                        <div style="font-size: 11px; font-weight: 800;" id="rankName">RECRUIT</div>
+                        <div style="font-size: 11px; font-weight: 800;" id="rankName">GAMEDEV JUNIOR</div>
                     </div>
                 </div>
 
                 <div class="currencies">
                     <div class="curr-item">🤖 Bots: <span id="botCount">0</span></div>
-                    <div class="curr-item">⚡ +<span id="passiveRate">0</span>/h</div>
+                    <div class="curr-item">⚡ +<span id="passiveRate">0</span>/d</div>
                 </div>
             </div>
 
-            <!-- LEVEL PROGRESS -->
-            <div class="level-card">
-                <div class="level-header">
-                    <span>LEVEL UPGRADE PROGRESS</span>
+            <div class="discovery-card">
+                <div class="disc-header">
+                    <span>PROJECT PROGRESS (NEXT LEVEL)</span>
                     <span id="levelProgressText">0 / 1,000</span>
                 </div>
                 <div class="bar-outer">
@@ -385,7 +372,6 @@
             </div>
         </div>
 
-        <!-- BALANCE -->
         <div class="balance-container interactive-element">
             <div class="balance-val">
                 <span>🪙</span>
@@ -393,14 +379,40 @@
             </div>
         </div>
 
-        <!-- STAGE & EVOLVING CHARACTER -->
         <div class="character-stage" id="stageArea">
             <div class="podium-base"></div>
 
-            <!-- DYNAMIC SVG CHARACTER RENDERED BASED ON LEVEL -->
-            <div id="characterContainer"></div>
+            <div id="characterContainer">
+                <svg class="hamster-avatar" id="hamsterTarget" viewBox="0 0 220 280">
+                    <ellipse cx="110" cy="265" rx="50" ry="10" fill="rgba(0,0,0,0.6)" />
+                    <path d="M 72 238 L 60 262 L 88 262 L 90 238 Z" fill="#ea580c" stroke="#1c1917" stroke-width="2"/>
+                    <path d="M 148 238 L 132 262 L 160 262 L 148 238 Z" fill="#ea580c" stroke="#1c1917" stroke-width="2"/>
+                    <path d="M 74 165 L 68 240 L 96 240 L 110 185 L 124 240 L 152 240 L 146 165 Z" fill="#1e293b" />
+                    <path d="M 58 105 L 72 170 L 148 170 L 162 105 Z" fill="#f8fafc" />
+                    <path d="M 80 145 L 140 145 L 135 168 L 85 168 Z" fill="#e2e8f0" />
+                    <text x="110" y="128" font-size="9" font-weight="900" fill="#2563eb" text-anchor="middle">GAME</text>
+                    <text x="110" y="138" font-size="6" font-weight="800" fill="#64748b" text-anchor="middle">GAMEPLAY DEVELOPER</text>
+                    <path d="M 58 105 L 35 155 L 50 160 L 70 120 Z" fill="#f8fafc" />
+                    <path d="M 162 105 L 185 155 L 170 160 L 150 120 Z" fill="#f8fafc" />
+                    <circle cx="38" cy="158" r="9" fill="#f97316" />
+                    <circle cx="182" cy="158" r="9" fill="#f97316" />
+                    <circle cx="72" cy="42" r="18" fill="#d97706" stroke="#b45309" stroke-width="2"/>
+                    <circle cx="72" cy="42" r="10" fill="#fbcfe8" />
+                    <circle cx="148" cy="42" r="18" fill="#d97706" stroke="#b45309" stroke-width="2"/>
+                    <circle cx="148" cy="42" r="10" fill="#fbcfe8" />
+                    <ellipse cx="110" cy="72" rx="42" ry="35" fill="#f97316" />
+                    <ellipse cx="80" cy="80" rx="18" ry="14" fill="#ffedd5" />
+                    <ellipse cx="140" cy="80" rx="18" ry="14" fill="#ffedd5" />
+                    <path d="M 100 38 Q 110 25 120 38" fill="#78350f" />
+                    <circle cx="92" cy="65" r="5" fill="#0f172a" />
+                    <circle cx="128" cy="65" r="5" fill="#0f172a" />
+                    <circle cx="94" cy="63" r="2" fill="#ffffff" />
+                    <circle cx="130" cy="63" r="2" fill="#ffffff" />
+                    <ellipse cx="110" cy="74" rx="4" ry="3" fill="#f43f5e" />
+                    <path d="M 110 77 L 110 82 M 105 82 Q 110 86 115 82" fill="none" stroke="#78350f" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
 
-            <!-- SIDE ACTION BUTTONS -->
             <div class="stage-side-btn top" id="refBtn">
                 <span style="font-size: 16px;">👥</span>
                 <span>INVITE</span>
@@ -408,27 +420,25 @@
 
             <div class="stage-side-btn middle" id="botShopBtn">
                 <span style="font-size: 16px;">🤖</span>
-                <span>BUY BOT</span>
+                <span>AUTO BOT</span>
             </div>
 
             <div class="stage-side-btn bottom" id="energyBoostBtn">
                 <span style="font-size: 16px;">⚡</span>
-                <span>BOOST</span>
+                <span>RECHARGE</span>
             </div>
         </div>
 
-        <!-- BOTTOM HUD -->
         <div class="bottom-hud">
             <div class="energy-bar-box">
                 <span>⚡ ENERGY</span>
-                <span><span id="energy">3000</span> / <span id="maxEnergyVal">3000</span></span>
+                <span><span id="energy">1000</span> / <span id="maxEnergyVal">1000</span></span>
             </div>
 
-            <!-- NAVIGATION -->
             <div class="main-nav">
                 <div class="nav-item active">
                     <div class="nav-icon">🎯</div>
-                    <span>COMBAT</span>
+                    <span>PROJECT</span>
                 </div>
                 <div class="nav-item" id="botTab">
                     <div class="nav-icon">🤖</div>
@@ -451,24 +461,29 @@
 
     </div>
 
-    <!-- MODAL POPUP -->
     <div class="modal-overlay" id="popupModal">
         <div class="modal-box">
-            <h3 id="modalTitle" style="color: #fbbf24; margin-bottom: 10px;">NOTICE</h3>
+            <h3 id="modalTitle" style="color: #38bdf8; margin-bottom: 10px;">NOTICE</h3>
             <p id="modalDesc" style="font-size: 13px; color: #cbd5e1; margin-bottom: 15px;"></p>
-            <button class="modal-btn" id="modalActionBtn" style="display:none;">CONFIRM PURCHASE</button>
+            <button class="modal-btn" id="modalActionBtn" style="display:none;">CONFIRM</button>
             <button class="modal-btn" style="background:#334155; margin-top:5px;" onclick="closeModal()">CLOSE</button>
         </div>
     </div>
 
     <script>
-        // Game State Management
+        const tg = window.Telegram.WebApp;
+        if (tg) tg.expand();
+
+        let telegramUser = tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+        let userId = telegramUser ? telegramUser.id : (localStorage.getItem('cb_userid') || 'user_' + Math.random().toString(36).substring(2, 9));
+        localStorage.setItem('cb_userid', userId);
+
         let score = parseInt(localStorage.getItem('cb_score')) || 0;
-        let energy = parseInt(localStorage.getItem('cb_energy')) || 3000;
+        let energy = parseInt(localStorage.getItem('cb_energy')) || 1000;
         let level = parseInt(localStorage.getItem('cb_level')) || 1;
         let bots = parseInt(localStorage.getItem('cb_bots')) || 0;
-        let tapPower = level; // Tap power increases with level
-        let maxEnergy = 3000 + (level * 500);
+        let tapPower = 1; 
+        let maxEnergy = 1000 + (level * 250);
 
         const scoreEl = document.getElementById('score');
         const energyEl = document.getElementById('energy');
@@ -480,69 +495,15 @@
         const levelProgressText = document.getElementById('levelProgressText');
         const maxEnergyVal = document.getElementById('maxEnergyVal');
         const stageArea = document.getElementById('stageArea');
-        const charContainer = document.getElementById('characterContainer');
 
-        // Level Requirements & Ranks
         function getLevelData() {
             let req = level * 1000;
-            let rank = "RECRUIT";
-            if (level >= 3) rank = "OPERATIVE";
-            if (level >= 6) rank = "COMMANDER";
-            if (level >= 10) rank = "GENERAL";
-            if (level >= 15) rank = "WARLORD";
+            let rank = "JUNIOR DEV";
+            if (level >= 3) rank = "MIDDLE DEV";
+            if (level >= 6) rank = "SENIOR DEV";
+            if (level >= 10) rank = "LEAD DIRECTOR";
+            if (level >= 15) rank = "STUDIO CEO";
             return { req, rank };
-        }
-
-        // Render Character Costume and Gear based on level
-        function renderCharacter() {
-            let suitColor = level >= 6 ? "#0f172a" : (level >= 3 ? "#1e3a8a" : "#78350f");
-            let suitName = level >= 6 ? "Tactical Armor & Assault Rifle" : (level >= 3 ? "Combat Vest & Rifle" : "Brown Suit & AK-47");
-            
-            charContainer.innerHTML = `
-            <svg class="tactical-rabbit-avatar" id="rabbitTarget" viewBox="0 0 220 280">
-                <ellipse cx="110" cy="265" rx="55" ry="10" fill="rgba(0,0,0,0.6)" />
-                <path d="M 75 240 L 65 262 L 90 262 L 92 240 Z" fill="#1c1917" stroke="#292524" stroke-width="2"/>
-                <path d="M 145 240 L 130 262 L 155 262 L 145 240 Z" fill="#1c1917" stroke="#292524" stroke-width="2"/>
-                
-                <!-- Pants -->
-                <path d="M 74 170 L 68 242 L 98 242 L 110 190 L 122 242 L 152 242 L 146 170 Z" fill="${suitColor}" />
-
-                <!-- Suit / Armor Body -->
-                <path d="M 58 110 L 72 175 L 148 175 L 162 110 Z" fill="${suitColor}" />
-                <polygon points="110,110 100,135 120,135" fill="#f8fafc" />
-                <polygon points="110,125 106,165 110,175 114,165" fill="#fbbf24" />
-
-                <!-- Arms -->
-                <path d="M 58 110 L 32 165 L 48 170 L 70 125 Z" fill="${suitColor}" />
-                <path d="M 162 110 L 188 165 L 172 170 L 150 125 Z" fill="${suitColor}" />
-                <circle cx="35" cy="168" r="8" fill="#1c1917" />
-                <circle cx="185" cy="168" r="8" fill="#1c1917" />
-
-                <!-- AK-47 Rifle -->
-                <g transform="rotate(-25, 110, 150)">
-                    <path d="M 40 145 L 65 148 L 65 158 L 40 155 Z" fill="#451a03" rx="2"/>
-                    <rect x="65" y="145" width="55" height="13" rx="2" fill="#292524" />
-                    <path d="M 85 158 L 92 185 L 105 183 L 98 158 Z" fill="#1c1917" />
-                    <rect x="120" y="146" width="30" height="11" rx="2" fill="#78350f" />
-                    <rect x="150" y="149" width="35" height="5" fill="#1c1917" />
-                </g>
-
-                <!-- Ears & Head -->
-                <path d="M 82 60 Q 65 -5 85 0 Q 100 20 95 60 Z" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
-                <path d="M 84 50 Q 73 5 85 8 Q 94 22 92 50 Z" fill="#f43f5e" />
-                <path d="M 138 60 Q 155 -5 135 0 Q 120 20 125 60 Z" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
-                <path d="M 136 50 Q 147 5 135 8 Q 126 22 128 50 Z" fill="#f43f5e" />
-                <ellipse cx="110" cy="75" rx="38" ry="32" fill="#f1f5f9" />
-
-                <!-- Shades & Face -->
-                <rect x="84" y="62" width="26" height="15" rx="4" fill="#0f172a" />
-                <rect x="110" y="62" width="26" height="15" rx="4" fill="#0f172a" />
-                <polygon points="106,82 114,82 110,87" fill="#f43f5e" />
-                <path d="M 102 92 Q 110 98 118 92" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>`;
-
-            // Re-bind click event to new SVG element
-            document.getElementById('rabbitTarget').addEventListener('pointerdown', handleTap);
         }
 
         function updateUI() {
@@ -552,22 +513,19 @@
             levelNumEl.innerText = level;
             rankNameEl.innerText = lvlData.rank;
             botCountEl.innerText = bots;
-            passiveRateEl.innerText = (bots * 150).toLocaleString();
+            passiveRateEl.innerText = (bots * 50).toLocaleString(); // 50 coins per day per bot
             maxEnergyVal.innerText = maxEnergy;
 
             let progress = Math.min(100, (score / lvlData.req) * 100);
             levelProgressBar.style.width = progress + '%';
             levelProgressText.innerText = `${score.toLocaleString()} / ${lvlData.req.toLocaleString()}`;
 
-            // Level Up Check
             if (score >= lvlData.req) {
                 level++;
-                tapPower = level;
-                maxEnergy = 3000 + (level * 500);
+                maxEnergy = 1000 + (level * 250);
                 energy = maxEnergy;
                 localStorage.setItem('cb_level', level);
-                renderCharacter();
-                alert(`🎉 CONGRATULATIONS! PROMOTED TO LEVEL ${level}!`);
+                alert(`🎉 PROMOTED TO LEVEL ${level} (${lvlData.rank})!`);
             }
 
             localStorage.setItem('cb_score', score);
@@ -575,7 +533,6 @@
             localStorage.setItem('cb_bots', bots);
         }
 
-        // Tap Mechanics
         function handleTap(e) {
             e.preventDefault();
             if (energy >= tapPower) {
@@ -600,7 +557,8 @@
             }
         }
 
-        // Modal Controls
+        document.getElementById('hamsterTarget').addEventListener('pointerdown', handleTap);
+
         function showModal(title, desc, btnText, callback) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDesc').innerText = desc;
@@ -618,78 +576,75 @@
             document.getElementById('popupModal').style.display = 'none';
         }
 
-        // Buy Mining Bot (Tap Bot)
+        // Buy Auto-Miner Bot (Strictly 50 Coins / Day)
         document.getElementById('botShopBtn').addEventListener('click', () => {
-            let cost = 500 * (bots + 1);
+            let cost = 300 * (bots + 1);
             showModal(
-                "PURCHASE AUTOMATED MINING BOT",
-                `Deploy an autonomous miner to generate +150 coins/hr automatically.\n\nCost: ${cost.toLocaleString()} Coins`,
+                "PURCHASE AUTO-MINER BOT",
+                `Deploy an autonomous Hamster Bot to mine strictly +50 coins per day continuously.\n\nCost: ${cost.toLocaleString()} Coins`,
                 "BUY BOT",
                 () => {
                     if (score >= cost) {
                         score -= cost;
                         bots++;
                         updateUI();
-                        alert("🤖 Bot deployed successfully!");
+                        alert("🤖 Hamster Bot deployed! +50 Coins/day activated.");
                     } else {
-                        alert("❌ Insufficient coins!");
+                        alert("❌ Insufficient coins! Keep tapping to earn more.");
                     }
                 }
             );
         });
         document.getElementById('botTab').addEventListener('click', () => document.getElementById('botShopBtn').click());
 
-        // Referral System (+100 coins per invite)
+        // Referral System
         document.getElementById('refBtn').addEventListener('click', () => {
-            let refLink = `https://t.me/TapHustleGame2026_bot?start=ref_${Math.random().toString(36).substring(2, 8)}`;
-            showModal(
-                "REFERRAL PROGRAM",
-                `Invite your friends using your link[span_1](start_span)[span_1](end_span). When they join, you are instantly awarded +100 Coins[span_2](start_span)[span_2](end_span)!\n\nYour Link:\n${refLink}`,
-                "SIMULATE JOIN (+100 COINS)",
-                () => {
-                    score += 100;
-                    updateUI();
-                    alert("🎉 Referral reward claimed! +100 Coins[span_3](start_span)[span_3](end_span)");
-                }
-            );
+            let refLink = `https://t.me/TapHustleGame2026_bot?startapp=ref_${userId}`;
+            if (tg && tg.openTelegramLink) {
+                let shareText = encodeURIComponent("Join CoinBlitz! Help me build our Hamster GameDev studio and earn coins 🚀");
+                tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${shareText}`);
+            } else {
+                showModal(
+                    "REFERRAL PROGRAM",
+                    `Share this link with your friends. Earn +50 Coins per referral!\n\nLink:\n${refLink}`,
+                    null
+                );
+            }
         });
         document.getElementById('refTab').addEventListener('click', () => document.getElementById('refBtn').click());
 
-        // Boost Energy
         document.getElementById('energyBoostBtn').addEventListener('click', (e) => {
             e.stopPropagation();
             energy = maxEnergy;
             updateUI();
-            alert("⚡ ENERGY FULLY RECHARGED!");
+            alert("⚡ ENERGY RECHARGED!");
         });
 
-        // Shop / Upgrades Tab
         document.getElementById('shopTab').addEventListener('click', () => {
-            showModal("TACTICAL ARMORY UPGRADES", "Upgrade your weaponry and gear to multiply your tap yield and profit margins across levels.", null);
+            showModal("STUDIO UPGRADES", "Upgrade developer equipment and software licenses to increase passive yield.", null);
         });
 
-        // Passive Income Loop (Bots run every 5 seconds)
+        // Passive Auto-Mining Loop: 50 coins / day = 50 / 86400 seconds per second
         setInterval(() => {
             if (bots > 0) {
-                score += Math.round((bots * 150) / 720); // per 5 seconds
+                // Increments fractional coins every 5 seconds based on 50 coins per 24 hours
+                score += Math.max(1, Math.round((bots * 50) / 86400 * 5)); 
                 updateUI();
             }
         }, 5000);
 
-        // Energy Regen Loop
         setInterval(() => {
             if (energy < maxEnergy) {
-                energy = Math.min(maxEnergy, energy + 3);
+                energy = Math.min(maxEnergy, energy + 1);
                 updateUI();
             }
-        }, 1000);
+        }, 1500);
 
-        // Initialize App
-        renderCharacter();
         updateUI();
     </script>
 </body>
 </html>
+
 
 
 

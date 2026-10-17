@@ -2,151 +2,391 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tap to Earn Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Tap Hustle - Deluxe Edition</title>
     <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
         body {
-            background-color: #121212;
+            background: linear-gradient(180deg, #0f0f15 0%, #1a1a26 100%);
             color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .header {
-            margin-top: 10px;
+            margin-top: 5px;
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+            margin-bottom: 5px;
+        }
+        .rank-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #00e5ff;
+        }
+        .progress-container {
+            width: 80%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 10px auto;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ffcc00, #ff8800);
+            border-radius: 10px;
+            transition: width 0.3s ease;
         }
         .score-container {
-            font-size: 32px;
-            font-weight: bold;
-            color: #f1c40f;
-            margin: 15px 0;
-        }
-        #coin {
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle, #f39c12, #d35400);
-            border-radius: 50%;
-            margin: 20px auto;
+            font-size: 38px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 10px 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            font-weight: bold;
-            color: #fff;
+            gap: 8px;
+        }
+        .passive-income {
+            font-size: 12px;
+            color: #a0a0b0;
+            margin-top: -5px;
+        }
+        .coin-area {
+            position: relative;
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+        }
+        #coin {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 35% 35%, #ffe600, #ff9900 60%, #b36b00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(255, 170, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.6);
             cursor: pointer;
-            user-select: none;
-            box-shadow: 0px 8px 20px rgba(243, 156, 18, 0.4);
             transition: transform 0.05s ease;
+            border: 4px solid #ffea75;
         }
         #coin:active {
-            transform: scale(0.90);
+            transform: scale(0.92);
         }
-        .stat-box {
-            background: #1e1e1e;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px auto;
-            width: 80%;
+        .floating-text {
+            position: absolute;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 8px #ffcc00;
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.3); }
+        }
+        .energy-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 8px 15px;
             font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
         }
         .btn {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
+            background: linear-gradient(135deg, #2b2b3d 0%, #1c1c28 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            padding: 12px 8px;
+            font-size: 13px;
             font-weight: bold;
-            border-radius: 8px;
-            margin: 8px;
             cursor: pointer;
-            width: 85%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
         }
-        .btn-ad {
-            background-color: #e67e22;
+        .btn:active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #383850 0%, #252535 100%);
+        }
+        .btn-highlight {
+            background: linear-gradient(135deg, #00c853 0%, #008e3a 100%);
+            border: none;
+        }
+        .btn-orange {
+            background: linear-gradient(135deg, #ff9100 0%, #c77000 100%);
+            border: none;
+        }
+        .sub-text {
+            font-size: 11px;
+            opacity: 0.8;
+            font-weight: normal;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>⚡ Tap Hustle</h1>
+        <div class="title">⚡ TAP HUSTLE</div>
+        <div class="rank-badge" id="rankBadge">🥉 Bronze Hustler</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
     </div>
 
-    <div class="score-container">
-        🪙 <span id="coinCount">0</span>
+    <div>
+        <div class="score-container">
+            <span>🪙</span> <span id="score">0</span>
+        </div>
+        <div class="passive-income">
+            Passive Income: +<span id="profitRate">0</span>/sec
+        </div>
     </div>
 
-    <div class="stat-box">
-        ⚡ Energy: <span id="energy">500</span> / 500
+    <div class="coin-area">
+        <div id="coin">TAP</div>
     </div>
 
-    <div id="coin" onclick="handleTap()">TAP</div>
+    <div>
+        <div class="energy-container">
+            <span>⚡ Energy</span>
+            <span><span id="energy">500</span> / <span id="maxEnergy">500</span></span>
+        </div>
 
-    <button class="btn" id="upgradeBtn" onclick="buyUpgrade()">
-        📈 Buy Mining Card (Cost: 50 Coins)
-    </button>
+        <div class="btn-grid">
+            <button class="btn btn-highlight" id="buyCardBtn">
+                ⛏️ Mining Card
+                <span class="sub-text">Cost: <span id="cardCost">50</span> | +1/sec</span>
+            </button>
 
-    <button class="btn btn-ad" onclick="watchAd()">
-        📺 Watch Ad to Refill Energy
-    </button>
+            <button class="btn btn-orange" id="refillBtn">
+                📺 Watch Ad
+                <span class="sub-text">Instant Full Energy</span>
+            </button>
+
+            <button class="btn" id="dailyRewardBtn">
+                🎁 Daily Reward
+                <span class="sub-text">+500 Free Coins</span>
+            </button>
+
+            <button class="btn" id="taskBtn">
+                📋 Join Channel
+                <span class="sub-text">+1,000 Coins</span>
+            </button>
+        </div>
+    </div>
 
     <script>
-        let coins = 0;
-        let energy = 500;
+        // Game State
+        let score = parseInt(localStorage.getItem('hustle_score')) || 0;
+        let energy = parseInt(localStorage.getItem('hustle_energy')) || 500;
         let maxEnergy = 500;
-        let profitPerHour = 0;
-        let upgradeCost = 50;
+        let cardCost = parseInt(localStorage.getItem('hustle_cardCost')) || 50;
+        let passiveIncome = parseInt(localStorage.getItem('hustle_passiveIncome')) || 0;
+        let tapPower = 1;
 
-        function handleTap() {
-            if (energy > 0) {
-                coins += 1;
-                energy -= 1;
-                updateDisplay();
-            } else {
-                alert("Out of Energy! Wait for refill or watch an ad.");
-            }
+        // UI Elements
+        const scoreEl = document.getElementById('score');
+        const energyEl = document.getElementById('energy');
+        const coin = document.getElementById('coin');
+        const coinArea = document.querySelector('.coin-area');
+        const cardCostEl = document.getElementById('cardCost');
+        const profitRateEl = document.getElementById('profitRate');
+        const rankBadge = document.getElementById('rankBadge');
+        const progressBar = document.getElementById('progressBar');
+
+        // Audio Effects (Web Audio API Synthesizer)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playCoinSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
         }
 
-        function buyUpgrade() {
-            if (coins >= upgradeCost) {
-                coins -= upgradeCost;
-                profitPerHour += 10;
-                upgradeCost = Math.floor(upgradeCost * 1.5);
-                
-                document.getElementById("upgradeBtn").innerText = 
-                    `📈 Buy Mining Card (Cost: ${upgradeCost} Coins)`;
-                updateDisplay();
+        // Save State
+        function saveGame() {
+            localStorage.setItem('hustle_score', score);
+            localStorage.setItem('hustle_energy', energy);
+            localStorage.setItem('hustle_cardCost', cardCost);
+            localStorage.setItem('hustle_passiveIncome', passiveIncome);
+        }
+
+        // Update UI
+        function updateUI() {
+            scoreEl.innerText = score.toLocaleString();
+            energyEl.innerText = energy;
+            cardCostEl.innerText = cardCost;
+            profitRateEl.innerText = passiveIncome;
+
+            // Ranks System
+            let rank = "🥉 Bronze Hustler";
+            let progress = (score / 1000) * 100;
+
+            if (score >= 10000) {
+                rank = "💎 Diamond Boss";
+                progress = 100;
+            } else if (score >= 2500) {
+                rank = "🥇 Gold Hustler";
+                progress = ((score - 2500) / 7500) * 100;
+            } else if (score >= 1000) {
+                rank = "🥈 Silver Hustler";
+                progress = ((score - 1000) / 1500) * 100;
+            }
+
+            rankBadge.innerText = rank;
+            progressBar.style.width = Math.min(progress, 100) + '%';
+        }
+
+        // Tap Handler
+        coin.addEventListener('click', (e) => {
+            if (energy >= tapPower) {
+                score += tapPower;
+                energy -= tapPower;
+
+                // Play Audio & Haptics
+                playCoinSound();
+                if (navigator.vibrate) navigator.vibrate(20);
+
+                // Spawn Floating Text (+1)
+                const rect = coinArea.getBoundingClientRect();
+                const floatingText = document.createElement('div');
+                floatingText.className = 'floating-text';
+                floatingText.innerText = '+' + tapPower;
+                floatingText.style.left = (e.clientX - rect.left - 15) + 'px';
+                floatingText.style.top = (e.clientY - rect.top - 20) + 'px';
+                coinArea.appendChild(floatingText);
+
+                setTimeout(() => floatingText.remove(), 800);
+
+                updateUI();
+                saveGame();
+            }
+        });
+
+        // Mining Card Purchase
+        document.getElementById('buyCardBtn').addEventListener('click', () => {
+            if (score >= cardCost) {
+                score -= cardCost;
+                passiveIncome += 1;
+                cardCost = Math.floor(cardCost * 1.5);
+                updateUI();
+                saveGame();
             } else {
                 alert("Not enough coins!");
             }
-        }
+        });
 
-        function watchAd() {
-            alert("Simulating Video Ad... Thanks for watching!");
-            energy = maxEnergy;
-            updateDisplay();
-        }
+        // Simulated Ad Refill
+        document.getElementById('refillBtn').addEventListener('click', () => {
+            alert("Watching Ad... (Simulated)");
+            setTimeout(() => {
+                energy = maxEnergy;
+                updateUI();
+                saveGame();
+                alert("Energy Fully Refilled!");
+            }, 1000);
+        });
 
+        // Daily Reward
+        document.getElementById('dailyRewardBtn').addEventListener('click', () => {
+            const lastClaim = localStorage.getItem('hustle_lastClaim');
+            const today = new Date().toDateString();
+
+            if (lastClaim === today) {
+                alert("You already claimed today's reward! Come back tomorrow.");
+            } else {
+                score += 500;
+                localStorage.setItem('hustle_lastClaim', today);
+                updateUI();
+                saveGame();
+                alert("Claimed +500 Free Coins!");
+            }
+        });
+
+        // Task Button
+        document.getElementById('taskBtn').addEventListener('click', () => {
+            if (localStorage.getItem('hustle_taskCompleted')) {
+                alert("Task already completed!");
+            } else {
+                window.open("https://t.me/Telegram", "_blank");
+                score += 1000;
+                localStorage.setItem('hustle_taskCompleted', 'true');
+                updateUI();
+                saveGame();
+                alert("Task Completed! +1,000 Coins awarded!");
+            }
+        });
+
+        // Passive Income Loop (Per Second)
         setInterval(() => {
-            if (energy < maxEnergy) {
-                energy += 1;
-                updateDisplay();
+            if (passiveIncome > 0) {
+                score += passiveIncome;
+                updateUI();
+                saveGame();
             }
         }, 1000);
 
+        // Energy Regeneration Loop (1 Energy every 2 seconds)
         setInterval(() => {
-            if (profitPerHour > 0) {
-                coins += Math.floor(profitPerHour / 360);
-                updateDisplay();
+            if (energy < maxEnergy) {
+                energy = Math.min(maxEnergy, energy + 1);
+                updateUI();
+                saveGame();
             }
-        }, 10000);
+        }, 2000);
 
-        function updateDisplay() {
-            document.getElementById("coinCount").innerText = coins;
-            document.getElementById("energy").innerText = energy;
-        }
+        // Initial Load
+        updateUI();
     </script>
-
 </body>
 </html>
+
